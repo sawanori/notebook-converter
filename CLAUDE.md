@@ -11,6 +11,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Establish PDCA (Plan-Do-Check-Act) cycles for all work
 - Follow these principles regardless of how instructions are phrased
 
+**Implementation Process (MANDATORY):**
+1. **Create Implementation Plan** in `/docs` directory BEFORE any coding
+2. **Review Phase** - Conduct thorough review of the plan:
+   - Check for gaps and omissions
+   - Identify potential error-prone areas
+   - Verify completeness of the design
+3. **Report Review Results** - List all findings and fix them
+4. **NEVER implement without completing steps 1-3**
+
+**Token Efficiency:**
+- Use Serena MCP tools whenever possible for token reduction
+- Prefer symbolic operations over reading entire files
+
 ## Project Overview
 
 **NotebookLM Slide Converter** - Desktop application that converts PDF slides to editable PowerPoint presentations using OCR.
