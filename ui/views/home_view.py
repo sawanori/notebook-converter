@@ -310,23 +310,10 @@ def create_home_view(
         """Handle leave events on drop container."""
         update_drop_container_hover(False)
 
-    file_picker = ft.FilePicker()
-    file_picker.data = "home_file_picker"
-
-    save_picker = ft.FilePicker()
-    save_picker.data = "home_save_picker"
-
-    # Register pickers (avoid duplicates)
-    existing_pickers = {p.data for p in page.overlay if hasattr(p, "data")}
-    if "home_file_picker" not in existing_pickers:
-        page.overlay.append(file_picker)
-    if "home_save_picker" not in existing_pickers:
-        page.overlay.append(save_picker)
-
-    # Event handlers
+    # Async event handlers for file picking (Flet 0.80+ uses async FilePicker API)
     async def on_drop_click(e: ft.ControlEvent) -> None:
-        """Handle click on drop container."""
-        files = await file_picker.pick_files(
+        """Handle click on drop container - opens file picker dialog."""
+        files = await ft.FilePicker().pick_files(
             dialog_title="Select PDF file",
             allowed_extensions=["pdf"],
             allow_multiple=False,
@@ -341,7 +328,7 @@ def create_home_view(
     drop_container.on_hover = on_drop_hover
 
     async def on_convert_click(e: ft.ControlEvent) -> None:
-        """Handle convert button click."""
+        """Handle convert button click - opens save dialog."""
         if state.selected_file is None:
             return
 
@@ -351,18 +338,17 @@ def create_home_view(
 
         # Open save dialog
         default_name = state.selected_file.stem + ".pptx"
-        save_path = await save_picker.save_file(
+        result = await ft.FilePicker().save_file(
             dialog_title="Save PPTX file",
             file_name=default_name,
             allowed_extensions=["pptx"],
             initial_directory=initial_dir,
         )
 
-        if save_path and state.selected_file:
-            output_path = Path(save_path)
+        if result and state.selected_file:
+            output_path = Path(result)
             if not output_path.suffix:
                 output_path = output_path.with_suffix(".pptx")
-
             # Start conversion
             state.worker.start(state.selected_file, output_path)
 
@@ -376,13 +362,13 @@ def create_home_view(
     cancel_button.on_click = on_cancel_click
 
     # PubSub subscriptions
-    def on_progress(value: float) -> None:
+    def on_progress(topic: str, value: float) -> None:
         """Handle progress updates."""
         progress_bar.value = value
         progress_text.value = f"{int(value * 100)}%"
         page.update()
 
-    def on_log(message: str) -> None:
+    def on_log(topic: str, message: str) -> None:
         """Handle log messages."""
         log_view.controls.append(
             ft.Text(
@@ -397,7 +383,7 @@ def create_home_view(
             log_view.controls.pop(0)
         page.update()
 
-    def on_status(status: str) -> None:
+    def on_status(topic: str, status: str) -> None:
         """Handle status changes."""
         state.is_converting = status == "busy"
 
@@ -429,7 +415,7 @@ def create_home_view(
 
         page.update()
 
-    def on_error_message(message: str) -> None:
+    def on_error_message(topic: str, message: str) -> None:
         """Handle error messages."""
         page.snack_bar = ft.SnackBar(
             content=ft.Text(f"Error: {message}"),
