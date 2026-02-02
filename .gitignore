@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# App specific
+*.log
+settings.json
+
+# Build
+build/
+dist/
+*.spec
+*.exe
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Serena
+.serena/

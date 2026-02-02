@@ -1,0 +1,71 @@
+==================================================
+NotebookLM Slide Converter - Windows実行手順
+==================================================
+
+【前提条件】
+- Windows に Python 3.10+ がインストール済み
+- Tesseract-OCR がインストール済み
+- Poppler がインストール済み
+
+==================================================
+方法1: WSLパスから直接実行（簡単だが遅い）
+==================================================
+
+1. PowerShellを開く
+
+2. 以下のコマンドを実行:
+
+   cd \\wsl.localhost\ubuntu\home\noritakasawada\project\pdfpppt\notebook_converter
+   pip install -r requirements.txt
+   python main.py
+
+==================================================
+方法2: Windowsにコピーして実行（推奨）
+==================================================
+
+1. PowerShellを開く
+
+2. プロジェクトをコピー:
+
+   Copy-Item -Recurse "\\wsl.localhost\ubuntu\home\noritakasawada\project\pdfpppt\notebook_converter" "$HOME\Documents\notebook_converter"
+
+3. コピー先に移動:
+
+   cd $HOME\Documents\notebook_converter
+
+4. 依存パッケージをインストール:
+
+   pip install -r requirements.txt
+
+5. アプリを起動:
+
+   python main.py
+
+==================================================
+方法3: エクスプローラーでフォルダを開く
+==================================================
+
+1. エクスプローラーのアドレスバーに以下を入力:
+
+   \\wsl.localhost\ubuntu\home\noritakasawada\project\pdfpppt\notebook_converter
+
+2. フォルダ内を右クリック → 「ターミナルで開く」
+
+3. 以下を実行:
+
+   pip install -r requirements.txt
+   python main.py
+
+==================================================
+Tesseract/Poppler のインストール（未インストールの場合）
+==================================================
+
+【Tesseract-OCR】
+ダウンロード: https://github.com/UB-Mannheim/tesseract/wiki
+インストール時に「Japanese」言語パックを選択すること
+
+【Poppler】
+ダウンロード: https://github.com/oschwartz10612/poppler-windows/releases
+解凍して C:\Program Files\poppler-xx.xx.x に配置
+
+==================================================

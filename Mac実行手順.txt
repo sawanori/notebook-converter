@@ -1,0 +1,73 @@
+==================================================
+NotebookLM Slide Converter - Mac実行手順
+==================================================
+
+【1. 依存ツールのインストール（Homebrew使用）】
+
+# Homebrewがない場合は先にインストール
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Tesseract-OCR（日本語言語パック含む）
+brew install tesseract
+brew install tesseract-lang
+
+# Poppler（PDF処理用）
+brew install poppler
+
+==================================================
+【2. プロジェクトの取得】
+==================================================
+
+# 方法A: WSLからコピー（同じマシンの場合）
+# Finderで smb://[WindowsのIPアドレス] に接続してコピー
+
+# 方法B: GitHubにpushしてclone（推奨）
+# WSL側で:
+#   cd /home/noritakasawada/project/pdfpppt
+#   git init && git add . && git commit -m "initial"
+#   git remote add origin [your-repo-url]
+#   git push
+
+# Mac側で:
+#   git clone [your-repo-url]
+#   cd notebook_converter
+
+==================================================
+【3. Python環境セットアップ】
+==================================================
+
+# Python 3.10以上が必要
+python3 --version
+
+# 仮想環境を作成（推奨）
+python3 -m venv venv
+source venv/bin/activate
+
+# 依存パッケージをインストール
+pip install -r requirements.txt
+
+==================================================
+【4. アプリ起動】
+==================================================
+
+python main.py
+
+==================================================
+【トラブルシューティング】
+==================================================
+
+■ Tesseractが見つからない場合
+  → Settings画面でパスを手動設定
+  → 通常: /opt/homebrew/bin/tesseract (Apple Silicon)
+  → または: /usr/local/bin/tesseract (Intel Mac)
+
+■ Popplerが見つからない場合
+  → Settings画面でbinディレクトリを設定
+  → 通常: /opt/homebrew/bin (Apple Silicon)
+  → または: /usr/local/bin (Intel Mac)
+
+■ 日本語OCRが動かない場合
+  brew install tesseract-lang
+  → jpn言語パックがインストールされる
+
+==================================================
